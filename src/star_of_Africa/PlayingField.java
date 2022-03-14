@@ -442,8 +442,13 @@ public class PlayingField implements ChangeListener,ActionListener {
 			same.setSelected(true);
 		}
 		map.revealTokens();
-		JOptionPane.showMessageDialog(null, player[turn].getName()+" "+bundle.getString("wonGame"),bundle.getString("victory"),
-				JOptionPane.INFORMATION_MESSAGE,Token.STAR_OF_AFRICA.getResizedIcon(100));
+		JOptionPane.showMessageDialog(
+			null,
+			bundle.getString("wonGame").replace("$1", player[turn].getName()),
+			bundle.getString("victory"),
+			JOptionPane.INFORMATION_MESSAGE,
+			Token.STAR_OF_AFRICA.getResizedIcon(100)
+		);
 		// If the screen is too small to display the options in the main window, we'll have to do it by popup.
 		if (screenSize <= 2) {
 			showPopUpQuestion();
@@ -2024,7 +2029,7 @@ public class PlayingField implements ChangeListener,ActionListener {
 		eventPanel.removeAll();
 		eventPanel.add(eventLabel);
 		eventLabel.setIcon(d.getResizedIcon(eventWinSize));
-		messageLabel.setText(bundle.getString("youRolled")+" "+str);
+		messageLabel.setText(bundle.getString("youRolled").replace("$1", str));
 	}
 
 	/**
@@ -2226,8 +2231,17 @@ public class PlayingField implements ChangeListener,ActionListener {
 				//rollToTurn.setEnabled(false);
 				rollToken.setEnabled(false);
 				boardShipNoMoney.setEnabled(false);
-				messageLabel.setText(bundle.getString("still")+" "+player[turn].getTurnsLeftAsSlave()+" "+bundle.getString("turnsLeft"));
-				if (player[turn].isHuman()) { // The counting for the computer is handled by the AIPLayer class
+				if (player[turn].getTurnsLeftAsSlave() > 1) {
+					messageLabel.setText(
+						bundle.getString("stillTurnsLeft").replace(
+							"$1",
+							String.valueOf( player[turn].getTurnsLeftAsSlave() )
+						)
+					);
+				} else {
+					messageLabel.setText(bundle.getString("stillOneTurnLeft"));
+				}
+				if (player[turn].isHuman()) { // The counting for the computer is handled by the AIPlayer class
 					player[turn].setTurnsLeftAsSlave(player[turn].getTurnsLeftAsSlave() - 1);
 				}
 			}
